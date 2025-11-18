@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Admin - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <span class="user-role">👑 Administradora</span>
+      <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar Sesión</a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="cards-container">
+
+    <!-- CLIENTAS -->
+    <div class="card">
+      <h3>Gestión de Clientas</h3>
+      <p>Alta, baja y modificación de clientas registradas.</p>
+      <a href="{{ url_for('listar_clientas') }}" class="boton">Ir a Clientas</a>
+    </div>
+
+    <!-- PLANES -->
+    <div class="card">
+      <h3>Gestión de Planes</h3>
+      <p>Control de niveles, precios y rutinas de las clientas.</p>
+      <a href="{{ url_for('listar_planes') }}" class="boton">Ir a Planes</a>
+    </div>
+
+    <!-- USUARIOS -->
+    <div class="card">
+      <h3>Gestión de Usuarios</h3>
+      <p>Alta, baja y modificación de usuarios del sistema.</p>
+      <a href="{{ url_for('listar_usuarios') }}" class="boton">Ir a Usuarios</a>
+    </div>
+
+  </main>
+
+</body>
+</html>
+

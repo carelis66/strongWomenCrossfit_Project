@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Rutina - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    .form-container {
+      width: 420px;
+      background-color: #1a1a1a;
+      margin: 60px auto;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 79, 154, 0.3);
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff4f9a;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+      font-weight: bold;
+      color: #ddd;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 15px;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .btn-guardar {
+      background-color: #ff4f9a;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-guardar:hover {
+      background-color: #e04385;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_rutinas') }}">⬅ Volver</a>
+    </div>
+  </header>
+
+  <!-- FORMULARIO -->
+  <main class="form-container">
+    <h2>Editar Rutina</h2>
+
+    <form method="POST">
+      <label>Nombre de la Rutina:</label>
+      <input type="text" name="nombre" value="{{ rutina.nombre }}" required>
+
+      <label>Día:</label>
+      <select name="dia" required>
+        <option value="">Seleccionar día</option>
+        <option {% if rutina.dia == 'Lunes' %}selected{% endif %}>Lunes</option>
+        <option {% if rutina.dia == 'Martes' %}selected{% endif %}>Martes</option>
+        <option {% if rutina.dia == 'Miércoles' %}selected{% endif %}>Miércoles</option>
+        <option {% if rutina.dia == 'Jueves' %}selected{% endif %}>Jueves</option>
+        <option {% if rutina.dia == 'Viernes' %}selected{% endif %}>Viernes</option>
+        <option {% if rutina.dia == 'Sábado' %}selected{% endif %}>Sábado</option>
+      </select>
+
+      <label>Nivel:</label>
+      <select name="nivel" required>
+        <option value="">Seleccionar nivel</option>
+        <option {% if rutina.nivel == 'Amateur' %}selected{% endif %}>Amateur</option>
+        <option {% if rutina.nivel == 'Scaled' %}selected{% endif %}>Scaled</option>
+        <option {% if rutina.nivel == 'Advanced' %}selected{% endif %}>Advanced</option>
+        <option {% if rutina.nivel == 'RX' %}selected{% endif %}>RX</option>
+        <option {% if rutina.nivel == 'Competition' %}selected{% endif %}>Competition</option>
+      </select>
+
+      <label>Descripción:</label>
+      <textarea name="descripcion" required>{{ rutina.descripcion }}</textarea>
+
+      <button type="submit" class="btn-guardar">Guardar Cambios</button>
+    </form>
+  </main>
+</body>
+</html>
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Rutinas - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* ==== ESTILOS GENERALES ==== */
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+    }
+
+    /* ==== NAVBAR ==== */
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    /* ==== CONTENEDOR PRINCIPAL ==== */
+    .container {
+      width: 90%;
+      margin: 40px auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff4f9a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+
+    /* ==== TABLA ==== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background-color: #222;
+      color: #ff4f9a;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #222;
+    }
+
+    /* ==== BOTONES ==== */
+    .btn-editar, .btn-eliminar, .btn-agregar, .btn-volver {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      transition: background 0.3s ease;
+    }
+
+    .btn-editar {
+      background-color: #00c853;
+    }
+
+    .btn-editar:hover {
+      background-color: #00b44c;
+    }
+
+    .btn-eliminar {
+      background-color: #e91e63;
+    }
+
+    .btn-eliminar:hover {
+      background-color: #d81b60;
+    }
+
+    .btn-agregar {
+      background-color: #ff4f9a;
+      margin: 25px auto;
+      display: block;
+      width: fit-content;
+    }
+
+    .btn-agregar:hover {
+      background-color: #e04385;
+    }
+
+    .btn-volver {
+      display: block;
+      width: fit-content;
+      margin: 15px auto 40px;
+      background-color: #333;
+      color: #fff;
+      border: 1px solid #ff4f9a;
+    }
+
+    .btn-volver:hover {
+      background-color: #ff4f9a;
+      color: white;
+    }
+
+    /* ==== MENSAJES FLASH ==== */
+    .flash-container {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .flash-message {
+      display: inline-block;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      animation: fadeOut 4s forwards;
+    }
+
+    .flash-success { background-color: #00c853; }
+    .flash-info { background-color: #2196f3; }
+    .flash-error { background-color: #e91e63; }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==== NAVBAR ==== -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('coach') }}">⬅ Volver</a>
+    </div>
+  </header>
+
+  <!-- ==== CONTENIDO PRINCIPAL ==== -->
+  <main class="container">
+    <h2>Rutinas Diarias</h2>
+
+    <!-- ==== MENSAJES FLASH ==== -->
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% if mensajes %}
+        <div class="flash-container">
+          {% for categoria, mensaje in mensajes %}
+            <div class="flash-message
+              {% if categoria == 'success' %}flash-success{% elif categoria == 'info' %}flash-info{% else %}flash-error{% endif %}">
+              {{ mensaje }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- ==== TABLA DE RUTINAS ==== -->
+    {% if rutinas %}
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Día</th>
+            <th>Nivel</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rutinas %}
+          <tr>
+            <td>{{ r.nombre }}</td>
+            <td>{{ r.dia }}</td>
+            <td>{{ r.nivel }}</td>
+            <td>{{ r.descripcion }}</td>
+            <td>
+              <a href="{{ url_for('editar_rutina', id_rutina=r.id) }}" class="btn-editar">Editar</a>
+              <a href="{{ url_for('eliminar_rutina', id_rutina=r.id) }}" class="btn-eliminar"
+                 onclick="return confirm('¿Eliminar esta rutina?')">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p style="text-align:center; color:#ccc;">No hay rutinas registradas.</p>
+    {% endif %}
+
+    <!-- ==== BOTONES DE ACCIÓN ==== -->
+    <a href="{{ url_for('nueva_rutina') }}" class="btn-agregar">➕ Agregar Nueva Rutina</a>
+    <a href="{{ url_for('coach') }}" class="btn-volver">⬅ Volver al Panel</a>
+  </main>
+</body>
+</html>
+
+

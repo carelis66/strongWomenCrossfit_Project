@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Usuario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_usuarios') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <h2>Editar Usuario</h2>
+    <form method="POST">
+      <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
+      <input type="text" name="usuario" value="{{ usuario.usuario }}" required>
+      <input type="text" name="password" value="{{ usuario.password }}" required>
+
+      <select name="rol" required>
+        <option value="ADMIN" {% if usuario.rol == 'ADMIN' %}selected{% endif %}>ADMIN</option>
+        <option value="RECEPCION" {% if usuario.rol == 'RECEPCION' %}selected{% endif %}>RECEPCION</option>
+        <option value="COACH" {% if usuario.rol == 'COACH' %}selected{% endif %}>COACH</option>
+      </select>
+
+      <button type="submit" class="boton">Actualizar</button>
+    </form>
+  </main>
+
+</body>
+</html>

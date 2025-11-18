@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Planes de Entrenamiento</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('admin') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="tabla-contenedor">
+      <h2 class="titulo-seccion">Planes de Entrenamiento</h2>
+
+      <table class="tabla-planes">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Nivel</th>
+            <th>Duración</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for plan in planes %}
+          <tr>
+            <td>{{ plan.nombre }}</td>
+            <td>${{ plan.precio }}</td>
+            <td>{{ plan.nivel }}</td>
+            <td>{{ plan.duracion }}</td>
+            <td>{{ plan.descripcion }}</td>
+            <td>
+              <a href="{{ url_for('editar_plan', id_plan=plan.id) }}" class="btn-editar">Editar</a> |
+              <a href="{{ url_for('eliminar_plan', id_plan=plan.id) }}" class="btn-eliminar">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="acciones">
+        <a href="{{ url_for('nuevo_plan') }}" class="btn-agregar">Agregar Nuevo Plan</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+
+
+
