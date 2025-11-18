@@ -65,12 +65,12 @@
 
     /* CONTENIDO PRINCIPAL */
     .cards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      padding: 50px;
-      flex: 1;
-    }
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px;
+}
+
 
     .card {
       background-color: #1a1a1a;
@@ -166,8 +166,8 @@
 
     <div class="card">
       <h3>Seguimiento de Entrenamientos</h3>
-      <p>Registrar observaciones y progreso físico de cada clienta.</p>
-      <a href="{{ url_for('coach') }}">Ver Seguimiento</a>
+      <p>Progreso físico de cada clienta.</p>
+      <a href="{{ url_for('coach') }}">PROXIMAMENTE</a>
     </div>
 
   </main>

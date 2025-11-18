@@ -6,30 +6,29 @@ from collections import defaultdict
 app = Flask(__name__)
 app.secret_key = 'strongwomen_secret_key'
 
-# === Configuración adicional para mantener sesión estable ===
+# === Configuración de sesión ===
 app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 
-# === Debug de sesión (ver en consola si Flask la pierde) ===
+# === Debug de sesión ===
 @app.before_request
 def debug_session():
     print("🧩 Usuario en sesión:", session.get('usuario'), "| Rol:", session.get('rol'))
 
 
-# ===== Conexión a la Base de Datos MySQL =====
+# ===== Conexión a MySQL =====
 def get_db_connection():
-    connection = mysql.connector.connect(
+    return mysql.connector.connect(
         host="localhost",
         user="root",
         password="",
         database="strongwomen"
     )
-    return connection
 
 
-# ===== Datos (usuarios del sistema) =====
+# ===== Usuarios del sistema =====
 usuarios = {
     "admin": {"password": "1234", "rol": "ADMIN"},
     "recepcion": {"password": "abcd", "rol": "RECEPCION"},
@@ -37,31 +36,32 @@ usuarios = {
 }
 
 
-# ===== Función auxiliar para verificar permisos =====
+# ===== Función auxiliar =====
 def rol_permitido(*roles):
     return session.get('rol') in roles
 
 
-# ===== RUTA PRINCIPAL (LOGIN) =====
+# =========================================
+#                  LOGIN
+# =========================================
+
 @app.route('/')
 def login():
     return render_template('login.html')
 
 
-# ===== VALIDACIÓN DE LOGIN =====
 @app.route('/validar', methods=['POST'])
 def validar():
     usuario = request.form['usuario']
     contrasena = request.form['contrasena']
 
     if usuario in usuarios and usuarios[usuario]["password"] == contrasena:
-        rol = usuarios[usuario]["rol"]
         session['usuario'] = usuario
-        session['rol'] = rol
+        session['rol'] = usuarios[usuario]["rol"]
 
-        if rol == "ADMIN":
+        if session['rol'] == "ADMIN":
             return redirect(url_for('admin'))
-        elif rol == "RECEPCION":
+        elif session['rol'] == "RECEPCION":
             return redirect(url_for('recepcion'))
         else:
             return redirect(url_for('coach'))
@@ -69,14 +69,16 @@ def validar():
         return render_template('login.html', error="Credenciales inválidas")
 
 
-# ===== CERRAR SESIÓN =====
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
 
-# ===== DASHBOARDS =====
+# =========================================
+#                DASHBOARDS
+# =========================================
+
 @app.route('/admin')
 def admin():
     if not rol_permitido("ADMIN"):
@@ -98,7 +100,10 @@ def coach():
     return render_template('dashboard_coach.html', rol=session.get('rol'))
 
 
-# ===== CRUD CLIENTAS =====
+# =========================================
+#              CRUD CLIENTAS
+# =========================================
+
 @app.route('/clientas')
 def listar_clientas():
     if not rol_permitido("ADMIN", "RECEPCION", "COACH"):
@@ -125,13 +130,15 @@ def nueva_clienta():
         edad = request.form['edad']
         plan = request.form['plan']
         fecha = request.form['fecha']
+        celular = request.form['celular']
+        emergencia = request.form['emergencia']
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO clientas (nombre, apellido, edad, plan, fecha_inscripcion) VALUES (%s, %s, %s, %s, %s)",
-            (nombre, apellido, edad, plan, fecha)
-        )
+        cursor.execute("""
+            INSERT INTO clientas (nombre, apellido, edad, plan, fecha_inscripcion, celular, emergencia)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (nombre, apellido, edad, plan, fecha, celular, emergencia))
         conn.commit()
         cursor.close()
         conn.close()
@@ -150,34 +157,39 @@ def editar_clienta(id_clienta):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("SELECT * FROM clientas WHERE id = %s", (id_clienta,))
+    clienta = cursor.fetchone()
+
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']
         edad = request.form['edad']
         plan = request.form['plan']
         fecha = request.form['fecha']
+        celular = request.form['celular']
+        emergencia = request.form['emergencia']
 
         cursor.execute("""
             UPDATE clientas
-            SET nombre=%s, apellido=%s, edad=%s, plan=%s, fecha_inscripcion=%s
+            SET nombre=%s, apellido=%s, edad=%s, plan=%s, fecha_inscripcion=%s,
+                celular=%s, emergencia=%s
             WHERE id=%s
-        """, (nombre, apellido, edad, plan, fecha, id_clienta))
+        """, (nombre, apellido, edad, plan, fecha, celular, emergencia, id_clienta))
+
         conn.commit()
         cursor.close()
         conn.close()
 
-        flash("✅ Cambios guardados correctamente.", "success")
+        flash("✅ Clienta actualizada correctamente.", "success")
         return redirect(url_for('listar_clientas'))
 
-    cursor.execute("SELECT * FROM clientas WHERE id = %s", (id_clienta,))
-    clienta = cursor.fetchone()
     cursor.close()
     conn.close()
     return render_template('editar_clienta.html', clienta=clienta)
 
 
 @app.route('/clientas/eliminar/<int:id_clienta>')
-def borrar_clienta(id_clienta):
+def eliminar_clienta(id_clienta):
     if not rol_permitido("ADMIN"):
         return "Acceso denegado"
 
@@ -207,7 +219,10 @@ def ver_clienta(id_clienta):
     return render_template('ver_clienta.html', clienta=clienta, rol=session.get('rol'))
 
 
-# ===== CRUD PLANES =====
+# =========================================
+#                CRUD PLANES
+# =========================================
+
 @app.route('/planes')
 def listar_planes():
     if not rol_permitido("ADMIN", "RECEPCION", "COACH"):
@@ -237,10 +252,10 @@ def nuevo_plan():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO planes (nombre, precio, nivel, duracion, descripcion) VALUES (%s, %s, %s, %s, %s)",
-            (nombre, precio, nivel, duracion, descripcion)
-        )
+        cursor.execute("""
+            INSERT INTO planes (nombre, precio, nivel, duracion, descripcion)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (nombre, precio, nivel, duracion, descripcion))
         conn.commit()
         cursor.close()
         conn.close()
@@ -259,6 +274,9 @@ def editar_plan(id_plan):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("SELECT * FROM planes WHERE id = %s", (id_plan,))
+    plan = cursor.fetchone()
+
     if request.method == 'POST':
         nombre = request.form['nombre']
         precio = request.form['precio']
@@ -271,15 +289,14 @@ def editar_plan(id_plan):
             SET nombre=%s, precio=%s, nivel=%s, duracion=%s, descripcion=%s
             WHERE id=%s
         """, (nombre, precio, nivel, duracion, descripcion, id_plan))
+
         conn.commit()
         cursor.close()
         conn.close()
 
-        flash("✅ Cambios guardados correctamente.", "success")
+        flash("✅ Plan actualizado correctamente.", "success")
         return redirect(url_for('listar_planes'))
 
-    cursor.execute("SELECT * FROM planes WHERE id = %s", (id_plan,))
-    plan = cursor.fetchone()
     cursor.close()
     conn.close()
     return render_template('editar_plan.html', plan=plan)
@@ -301,7 +318,10 @@ def eliminar_plan(id_plan):
     return redirect(url_for('listar_planes'))
 
 
-# ===== CRUD RUTINAS =====
+# =========================================
+#                CRUD RUTINAS
+# =========================================
+
 @app.route('/rutinas')
 def listar_rutinas():
     if not rol_permitido("COACH", "ADMIN"):
@@ -330,13 +350,15 @@ def nueva_rutina():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO rutinas (nombre, dia, nivel, descripcion) VALUES (%s, %s, %s, %s)",
-                       (nombre, dia, nivel, descripcion))
+        cursor.execute("""
+            INSERT INTO rutinas (nombre, dia, nivel, descripcion)
+            VALUES (%s, %s, %s, %s)
+        """, (nombre, dia, nivel, descripcion))
         conn.commit()
         cursor.close()
         conn.close()
 
-        flash("✅ Rutina agregada correctamente.", "success")
+        flash("✅ Rutina creada correctamente.", "success")
         return redirect(url_for('listar_rutinas'))
 
     return render_template('nueva_rutina.html')
@@ -350,6 +372,14 @@ def editar_rutina(id_rutina):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("SELECT * FROM rutinas WHERE id = %s", (id_rutina,))
+    rutina = cursor.fetchone()
+
+    if not rutina:
+        cursor.close()
+        conn.close()
+        return "❌ Rutina no encontrada"
+
     if request.method == 'POST':
         nombre = request.form['nombre']
         dia = request.form['dia']
@@ -361,15 +391,14 @@ def editar_rutina(id_rutina):
             SET nombre=%s, dia=%s, nivel=%s, descripcion=%s
             WHERE id=%s
         """, (nombre, dia, nivel, descripcion, id_rutina))
+
         conn.commit()
         cursor.close()
         conn.close()
 
-        flash("✅ Cambios guardados correctamente.", "success")
+        flash("✅ Rutina actualizada correctamente.", "success")
         return redirect(url_for('listar_rutinas'))
 
-    cursor.execute("SELECT * FROM rutinas WHERE id = %s", (id_rutina,))
-    rutina = cursor.fetchone()
     cursor.close()
     conn.close()
 
@@ -392,7 +421,10 @@ def eliminar_rutina(id_rutina):
     return redirect(url_for('listar_rutinas'))
 
 
-# ===== CRUD TURNOS =====
+# =========================================
+#                CRUD TURNOS
+# =========================================
+
 @app.route('/turnos')
 def listar_turnos():
     if not rol_permitido("RECEPCION"):
@@ -409,9 +441,8 @@ def listar_turnos():
     for t in turnos:
         turnos_por_fecha[t['fecha']].append(t)
 
-    ahora = datetime.now()
-
-    return render_template('lista_turnos.html', turnos_por_fecha=turnos_por_fecha, ahora=ahora, rol=session.get('rol'))
+    return render_template('lista_turnos.html', turnos_por_fecha=turnos_por_fecha,
+                           ahora=datetime.now(), rol=session.get('rol'))
 
 
 @app.route('/turnos/nuevo', methods=['GET', 'POST'])
@@ -425,23 +456,27 @@ def nuevo_turno():
         hora = request.form['hora']
 
         if hora < "07:00" or hora >= "21:00":
-            return render_template('nuevo_turno.html', error="El horario debe estar entre 07:00 y 21:00.")
+            return render_template('nuevo_turno.html',
+                                   error="El horario debe estar entre 07:00 y 21:00.")
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM turnos WHERE fecha = %s AND hora = %s", (fecha, hora))
+        cursor.execute("SELECT * FROM turnos WHERE fecha=%s AND hora=%s",
+                       (fecha, hora))
         existe = cursor.fetchone()
 
         if existe:
             cursor.close()
             conn.close()
-            return render_template('nuevo_turno.html', error="Ya existe un turno agendado en ese horario.")
+            return render_template('nuevo_turno.html',
+                                   error="Ya existe un turno agendado en ese horario.")
 
-        cursor.execute(
-            "INSERT INTO turnos (nombre_clienta, fecha, hora, estado) VALUES (%s, %s, %s, %s)",
-            (nombre_clienta, fecha, hora, "Pendiente")
-        )
+        cursor.execute("""
+            INSERT INTO turnos (nombre_clienta, fecha, hora, estado)
+            VALUES (%s, %s, %s, %s)
+        """, (nombre_clienta, fecha, hora, "Pendiente"))
+
         conn.commit()
         cursor.close()
         conn.close()
@@ -459,7 +494,8 @@ def cambiar_estado_turno(id_turno, nuevo_estado):
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE turnos SET estado = %s WHERE id = %s", (nuevo_estado, id_turno))
+    cursor.execute("UPDATE turnos SET estado=%s WHERE id=%s",
+                   (nuevo_estado, id_turno))
     conn.commit()
     cursor.close()
     conn.close()
@@ -468,7 +504,10 @@ def cambiar_estado_turno(id_turno, nuevo_estado):
     return redirect(url_for('listar_turnos'))
 
 
-# ===== CRUD USUARIOS =====
+# =========================================
+#                CRUD USUARIOS
+# =========================================
+
 @app.route('/usuarios')
 def listar_usuarios():
     if not rol_permitido("ADMIN"):
@@ -480,7 +519,9 @@ def listar_usuarios():
     usuarios = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template('lista_usuarios.html', usuarios=usuarios, rol=session.get('rol'))
+
+    return render_template('lista_usuarios.html', usuarios=usuarios,
+                           rol=session.get('rol'))
 
 
 @app.route('/usuarios/nuevo', methods=['GET', 'POST'])
@@ -496,10 +537,10 @@ def nuevo_usuario():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO usuarios (nombre, usuario, password, rol) VALUES (%s, %s, %s, %s)",
-            (nombre, usuario, password, rol)
-        )
+        cursor.execute("""
+            INSERT INTO usuarios (nombre, usuario, password, rol)
+            VALUES (%s, %s, %s, %s)
+        """, (nombre, usuario, password, rol))
         conn.commit()
         cursor.close()
         conn.close()
@@ -518,9 +559,12 @@ def editar_usuario(id_usuario):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("SELECT * FROM usuarios WHERE id = %s", (id_usuario,))
+    usuario = cursor.fetchone()
+
     if request.method == 'POST':
         nombre = request.form['nombre']
-        usuario = request.form['usuario']
+        usuario_input = request.form['usuario']
         password = request.form['password']
         rol = request.form['rol']
 
@@ -528,7 +572,8 @@ def editar_usuario(id_usuario):
             UPDATE usuarios
             SET nombre=%s, usuario=%s, password=%s, rol=%s
             WHERE id=%s
-        """, (nombre, usuario, password, rol, id_usuario))
+        """, (nombre, usuario_input, password, rol, id_usuario))
+
         conn.commit()
         cursor.close()
         conn.close()
@@ -536,11 +581,10 @@ def editar_usuario(id_usuario):
         flash("✅ Usuario actualizado correctamente.", "success")
         return redirect(url_for('listar_usuarios'))
 
-    cursor.execute("SELECT * FROM usuarios WHERE id = %s", (id_usuario,))
-    usuario_data = cursor.fetchone()
     cursor.close()
     conn.close()
-    return render_template('editar_usuario.html', usuario=usuario_data)
+
+    return render_template('editar_usuario.html', usuario=usuario)
 
 
 @app.route('/usuarios/eliminar/<int:id_usuario>')
@@ -559,9 +603,13 @@ def eliminar_usuario(id_usuario):
     return redirect(url_for('listar_usuarios'))
 
 
-# ===== INICIO =====
+# =========================================
+#                 RUN APP
+# =========================================
+
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 

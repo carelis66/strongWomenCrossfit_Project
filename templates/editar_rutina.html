@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Rutina</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" class="nav-logo">
+      <h2>Editar Rutina</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_rutinas') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <form method="POST" class="form-card">
+
+      <label>Nombre:</label>
+      <input type="text" name="nombre" value="{{ rutina.nombre }}" required>
+
+      <label>Día:</label>
+      <input type="text" name="dia" value="{{ rutina.dia }}" required>
+
+      <label>Nivel:</label>
+      <input type="text" name="nivel" value="{{ rutina.nivel }}" required>
+
+      <label>Descripción:</label>
+      <textarea name="descripcion" rows="3" required>{{ rutina.descripcion }}</textarea>
+
+      <button type="submit" class="btn-guardar">Guardar Cambios</button>
+    </form>
+  </main>
+
+</body>
+</html>

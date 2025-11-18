@@ -204,11 +204,13 @@
           <td>{{ clienta.fecha_inscripcion }}</td>
           <td>
             <a href="{{ url_for('ver_clienta', id_clienta=clienta.id) }}" class="btn-ver">Ver Ficha</a>
+
             {% if rol in ["ADMIN", "RECEPCION"] %}
               <a href="{{ url_for('editar_clienta', id_clienta=clienta.id) }}" class="btn-editar">Editar</a>
             {% endif %}
+
             {% if rol == "ADMIN" %}
-              <a href="{{ url_for('borrar_clienta', id_clienta=clienta.id) }}" class="btn-eliminar">Eliminar</a>
+              <a href="{{ url_for('eliminar_clienta', id_clienta=clienta.id) }}" class="btn-eliminar">Eliminar</a>
             {% endif %}
           </td>
         </tr>
@@ -231,4 +233,5 @@
   </footer>
 </body>
 </html>
+
 
