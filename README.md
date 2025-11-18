@@ -44,10 +44,10 @@ Rutinas
 Mejoras visuales
 Verified 
 
-✅ v1.2.0
+v1.2.0
 Agregaste archivo de pruebas unitarias
 Se subió correctamente
 
-✅ v1.2.1 — Hotfix
+v1.2.1 — Hotfix
 Correcciones
 
