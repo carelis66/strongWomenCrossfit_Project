@@ -33,14 +33,21 @@ Este sistema permite administrar clientas, planes de entrenamiento, rutinas diar
   - Creación de usuarios.
   - Asignación de roles.
 
-## 📌 Versionado
+##  Versionado
+v1.0.0 — Primera versión estable
+ Base del proyecto
+ Código inicial
 
-- **Versión 1.0.0 (V1):**  
-  - Clase `Clienta` con atributos básicos.  
-  - Primera entrega estable del proyecto.
-  - **Versión 1.1.0 (V2):**  
-  - Pages
-  - Base de datos
- 
-  -  **Versión 1.1.0 (V2):**
-  -  Pruebas Unitarias
+ v1.1.0 — Segunda versión
+Panel Coach
+Rutinas
+Mejoras visuales
+Verified 
+
+✅ v1.2.0
+Agregaste archivo de pruebas unitarias
+Se subió correctamente
+
+✅ v1.2.1 — Hotfix
+Correcciones
+
