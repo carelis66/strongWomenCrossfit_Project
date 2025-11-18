@@ -2,7 +2,7 @@
 
 **Strong Women Crossfit** es un proyecto académico para la gestión de un gimnasio exclusivo para mujeres, orientado a entrenamientos tipo CrossFit.  
 
-Este sistema permite administrar clientas, planes de entrenamiento, rutinas diarias y turnos, con control de acceso por roles de usuario.
+Este sistema permite administrar clientas, planes de entrenamiento, rutinas diarias y turnos.
 
 ---
 
@@ -27,7 +27,6 @@ Este sistema permite administrar clientas, planes de entrenamiento, rutinas diar
 
 - **Gestión de turnos**
   - Administración de horarios y salas.
-  - Validación para evitar reservas duplicadas.
   - Recepción y admin pueden crear/editar.
 
 - **Gestión de usuarios (solo ADMIN)**
@@ -38,4 +37,10 @@ Este sistema permite administrar clientas, planes de entrenamiento, rutinas diar
 
 - **Versión 1.0.0 (V1):**  
   - Clase `Clienta` con atributos básicos.  
-  - Primera entrega estable del proyecto.  
+  - Primera entrega estable del proyecto.
+  - **Versión 1.1.0 (V2):**  
+  - Pages
+  - Base de datos
+ 
+  -  **Versión 1.1.0 (V2):**
+  -  Pruebas Unitarias
