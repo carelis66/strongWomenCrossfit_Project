@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Usuarios</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('admin') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="content">
+    <h2>Lista de Usuarios</h2>
+    <a href="{{ url_for('nuevo_usuario') }}" class="boton">Agregar Nuevo Usuario</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.usuario }}</td>
+          <td>{{ u.rol }}</td>
+          <td>
+            <a href="{{ url_for('editar_usuario', id_usuario=u.id) }}">Editar</a> |
+            <a href="{{ url_for('eliminar_usuario', id_usuario=u.id) }}" onclick="return confirm('¿Eliminar usuario?')">Eliminar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+</body>
+</html>

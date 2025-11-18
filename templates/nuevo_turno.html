@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuevo Turno - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    /* FORMULARIO */
+    .form-container {
+      width: 420px;
+      background-color: #1a1a1a;
+      margin: 60px auto;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 79, 154, 0.3);
+      text-align: center;
+      flex: 1;
+    }
+
+    h2 {
+      color: #ff4f9a;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+      font-weight: bold;
+      color: #ddd;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #ff4f9a;
+    }
+
+    .btn-add {
+      display: inline-block;
+      background-color: #ff4f9a;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-add:hover {
+      background-color: #e04385;
+    }
+
+    p.error {
+      color: #ff4f9a;
+      margin-bottom: 15px;
+      background: rgba(255, 79, 154, 0.1);
+      border-left: 4px solid #ff4f9a;
+      padding: 8px;
+      border-radius: 4px;
+      text-align: left;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 2px solid #ff4f9a;
+      background-color: #000;
+      font-size: 14px;
+      color: #999;
+    }
+
+    footer a {
+      color: #ff4f9a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <!-- ✅ Ahora vuelve a la lista de turnos -->
+      <a href="{{ url_for('listar_turnos') }}">⬅ Volver</a>
+    </div>
+  </header>
+
+  <!-- FORMULARIO -->
+  <main class="form-container">
+    <h2>Registrar Nuevo Turno</h2>
+
+    {% if error %}
+      <p class="error">⚠️ {{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+      <label>Nombre de la Clienta:</label>
+      <input type="text" name="nombre_clienta" placeholder="Ej: María López" required>
+
+      <label>Fecha:</label>
+      <input type="date" name="fecha" required>
+
+      <label>Hora:</label>
+      <input type="time" name="hora" step="3600" min="07:00" max="21:00" required>
+
+      <button type="submit" class="btn-add">Guardar Turno</button>
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Panel de Recepción — Strong Women Crossfit © 2025 | 
+      <a href="{{ url_for('recepcion') }}">Volver al Inicio</a>
+    </p>
+  </footer>
+</body>
+</html>
+

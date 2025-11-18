@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Clientas - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .container {
+      width: 90%;
+      margin: 40px auto;
+      flex: 1;
+    }
+
+    .titulo-seccion {
+      color: #ff4f9a;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background-color: #222;
+      color: #ff4f9a;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #222;
+    }
+
+    .btn-editar, .btn-eliminar, .btn-agregar, .btn-ver {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      transition: background 0.3s ease;
+      margin: 2px;
+    }
+
+    .btn-ver {
+      background-color: #2196F3;
+    }
+    .btn-ver:hover {
+      background-color: #1976D2;
+    }
+
+    .btn-editar {
+      background-color: #00c853;
+    }
+    .btn-editar:hover {
+      background-color: #00b44c;
+    }
+
+    .btn-eliminar {
+      background-color: #e91e63;
+    }
+    .btn-eliminar:hover {
+      background-color: #d81b60;
+    }
+
+    .btn-agregar {
+      background-color: #ff4f9a;
+      margin-top: 20px;
+    }
+    .btn-agregar:hover {
+      background-color: #e04385;
+    }
+
+    .acciones {
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 2px solid #ff4f9a;
+      background-color: #000;
+      font-size: 14px;
+      color: #999;
+    }
+
+    footer a {
+      color: #ff4f9a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      {% if rol == "RECEPCION" %}
+        <a href="{{ url_for('recepcion') }}">⬅ Volver</a>
+      {% elif rol == "COACH" %}
+        <a href="{{ url_for('coach') }}">⬅ Volver</a>
+      {% else %}
+        <a href="{{ url_for('admin') }}">⬅ Volver</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="container">
+    <h2 class="titulo-seccion">Listado de Clientas</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Edad</th>
+          <th>Celular</th>
+          <th>Emergencia</th>
+          <th>Plan</th>
+          <th>Fecha de Inscripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for clienta in clientas %}
+        <tr>
+          <td>{{ clienta.nombre }}</td>
+          <td>{{ clienta.apellido }}</td>
+          <td>{{ clienta.edad }}</td>
+          <td>{{ clienta.celular }}</td>
+          <td>{{ clienta.emergencia }}</td>
+          <td>{{ clienta.plan }}</td>
+          <td>{{ clienta.fecha_inscripcion }}</td>
+          <td>
+            <a href="{{ url_for('ver_clienta', id_clienta=clienta.id) }}" class="btn-ver">Ver Ficha</a>
+            {% if rol in ["ADMIN", "RECEPCION"] %}
+              <a href="{{ url_for('editar_clienta', id_clienta=clienta.id) }}" class="btn-editar">Editar</a>
+            {% endif %}
+            {% if rol == "ADMIN" %}
+              <a href="{{ url_for('borrar_clienta', id_clienta=clienta.id) }}" class="btn-eliminar">Eliminar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if rol in ["ADMIN", "RECEPCION"] %}
+    <div class="acciones">
+      <a href="{{ url_for('nueva_clienta') }}" class="btn-agregar">➕ Agregar Nueva Clienta</a>
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Panel {{ rol.title() }} — Strong Women Crossfit © 2025 |
+      <a href="{{ url_for('recepcion') if rol == 'RECEPCION' else (url_for('coach') if rol == 'COACH' else url_for('admin')) }}">Volver al Inicio</a>
+    </p>
+  </footer>
+</body>
+</html>
+

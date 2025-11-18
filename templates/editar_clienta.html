@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Clienta - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    .form-container {
+      width: 420px;
+      background-color: #1a1a1a;
+      margin: 60px auto;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 79, 154, 0.3);
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff4f9a;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+      font-weight: bold;
+      color: #ddd;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #ff4f9a;
+    }
+
+    .btn-guardar {
+      display: inline-block;
+      background-color: #ff4f9a;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-guardar:hover {
+      background-color: #e04385;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_clientas') }}">⬅ Volver</a>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <form method="POST" class="form-card">
+      <h2>Editar Clienta</h2>
+
+      <label>Nombre:</label>
+      <input type="text" name="nombre" value="{{ clienta.nombre }}" required>
+
+      <label>Apellido:</label>
+      <input type="text" name="apellido" value="{{ clienta.apellido }}" required>
+
+      <label>Edad:</label>
+      <input type="number" name="edad" value="{{ clienta.edad }}" required>
+
+      <label>Celular:</label>
+      <input type="tel" name="celular" value="{{ clienta.celular }}" required>
+
+      <label>Teléfono de Emergencia:</label>
+      <input type="tel" name="emergencia" value="{{ clienta.emergencia }}" required>
+
+      <label>Plan:</label>
+      <input type="text" name="plan" value="{{ clienta.plan }}" required>
+
+      <label>Fecha de Inscripción:</label>
+      <input type="date" name="fecha" value="{{ clienta.fecha_inscripcion }}" required>
+
+      <button type="submit" class="btn-guardar">Guardar Cambios</button>
+    </form>
+  </main>
+</body>
+</html>
+

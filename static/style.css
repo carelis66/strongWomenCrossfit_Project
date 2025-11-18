@@ -1,0 +1,580 @@
+/* === Fondo general === */
+body {
+  background-color: #000; /* negro */
+  font-family: 'Arial', sans-serif;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* === Tarjeta de login === */
+.login-card {
+  background-color: #111;
+  padding: 40px 50px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 20px #ff00a0;
+  width: 320px;
+}
+
+/* === Logo === */
+.logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 6px #ff00a0);
+}
+
+/* === Título === */
+h2 {
+  color: #ff00a0;
+  margin-bottom: 25px;
+}
+
+/* === Campos y botón === */
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+input {
+  background-color: #222;
+  color: white;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+button {
+  background-color: #ff00a0;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #e0008c;
+}
+
+/* === Error === */
+.error {
+  color: #ff5c93;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* === DASHBOARDS === */
+.dashboard {
+  background-color: #111;
+  color: white;
+  text-align: center;
+  padding: 40px;
+  border-radius: 15px;
+  width: 500px;
+  margin: 100px auto;
+  box-shadow: 0 0 25px #ff00a0;
+}
+
+.dashboard h1 {
+  color: #ff00a0;
+  margin-bottom: 10px;
+}
+
+.dashboard .menu {
+  margin-top: 30px;
+}
+
+.dashboard button, 
+.dashboard a {
+  display: block;
+  background-color: #ff00a0;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px auto;
+  width: 80%;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.dashboard button:hover,
+.dashboard a:hover {
+  background-color: #e0008c;
+}
+
+/* === NAVBAR SUPERIOR === */
+.navbar {
+  background-color: #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 0 15px #ff00a0;
+  border-bottom: 2px solid #ff00a0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-left h2 {
+  color: #ff00a0;
+  font-size: 20px;
+  margin: 0;
+}
+
+.nav-logo {
+  width: 45px;
+  height: auto;
+  filter: drop-shadow(0 0 5px #ff00a0);
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-role {
+  color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.logout-btn {
+  background-color: #ff00a0;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e0008c;
+}
+
+/* === CONTENEDOR DE CARDS === */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  padding: 120px 80px 60px; /* deja espacio arriba por la navbar */
+  justify-items: center;
+}
+
+/* === CARD === */
+.card {
+  background-color: #111;
+  color: white;
+  width: 280px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ff00a0;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px #ff00a0;
+}
+
+.card h3 {
+  color: #ff00a0;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+.card button {
+  background-color: #ff00a0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.card button:hover {
+  background-color: #e0008c;
+}
+
+
+/* === CONTENEDOR DE CARDS === */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 60px 40px;
+}
+
+/* === CARD === */
+.card {
+  background-color: #111;
+  color: white;
+  width: 280px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ff00a0;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px #ff00a0;
+}
+
+.card h3 {
+  color: #ff00a0;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+.card button {
+  background-color: #ff00a0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.card button:hover {
+  background-color: #e0008c;
+}
+
+/* === FORMULARIOS (Agregar/Editar Clientas) === */
+.form-card {
+  background-color: #111;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #ff00a0;
+  padding: 40px 50px;
+  text-align: center;
+  width: 420px; /* más compacto */
+  margin: 120px auto; /* centrado con margen desde la navbar */
+}
+
+.form-card h2 {
+  color: #ff00a0;
+  margin-bottom: 25px;
+}
+
+.form-card input,
+.form-card select,
+.form-card button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+.form-card input,
+.form-card select {
+  background-color: #222;
+  color: white;
+  text-align: center;
+}
+
+.form-card input::placeholder {
+  color: #aaa;
+}
+
+.form-card button {
+  background-color: #ff00a0;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-card button:hover {
+  background-color: #e0008c;
+}
+
+/* === Botón Volver dentro de formularios === */
+.form-card a {
+  color: #ff00a0;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.form-card a:hover {
+  text-decoration: underline;
+}
+
+/* === TABLAS === */
+.tabla-contenedor {
+  background-color: #111;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #f400a1;
+  width: 85%;
+  margin: 50px auto;
+}
+
+.tabla-planes {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.tabla-planes th {
+  background-color: #222;
+  color: #ff00a0;
+  padding: 12px;
+  border-bottom: 2px solid #ff00a0;
+}
+
+.tabla-planes td {
+  padding: 10px;
+  border-bottom: 1px solid #444;
+}
+
+.tabla-planes tr:hover {
+  background-color: #1a1a1a;
+}
+
+/* === BOTONES === */
+.btn-agregar {
+  display: inline-block;
+  background-color: #ff00a0;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  margin-top: 20px;
+}
+
+.btn-agregar:hover {
+  background-color: #d60080;
+}
+
+.btn-editar {
+  color: #33cfff;
+  text-decoration: none;
+}
+
+.btn-eliminar {
+  color: #ff3366;
+  text-decoration: none;
+}
+
+.btn-editar:hover, .btn-eliminar:hover {
+  text-decoration: underline;
+}
+/* === FORMULARIOS === */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
+
+.form-card {
+  background-color: #111;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #f400a1;
+  color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-card h2 {
+  text-align: center;
+  color: #ff00a0;
+  margin-bottom: 10px;
+}
+
+.form-card label {
+  font-weight: bold;
+  margin-top: 5px;
+  color: #fff;
+}
+
+.form-card input,
+.form-card textarea {
+  background-color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  outline: none;
+  font-size: 15px;
+}
+
+.form-card input:focus,
+.form-card textarea:focus {
+  box-shadow: 0 0 8px #ff00a0;
+}
+
+.btn-guardar {
+  background-color: #ff00a0;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-guardar:hover {
+  background-color: #d60080;
+}
+
+/* ======= ESTILO DE LISTADOS (USUARIOS / CLIENTAS / PLANES) ======= */
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.table-card {
+  background-color: #111;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #ff00aa;
+  width: 90%;
+  max-width: 1100px;
+}
+
+.table-card h2 {
+  text-align: center;
+  color: #ff33cc;
+  margin-bottom: 25px;
+  font-size: 1.6em;
+  letter-spacing: 0.5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ff00aa;
+}
+
+th {
+  background-color: #ff00aa;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+tr:hover {
+  background-color: #2a2a2a;
+}
+
+a {
+  color: #ff66cc;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffffff;
+}
+
+.btn-agregar {
+  display: block;
+  margin: 25px auto 0;
+  background-color: #ff00aa;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #ff00aa;
+  transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+  background-color: #ff33cc;
+  box-shadow: 0 0 25px #ff33cc;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 2px;
+}
+
+.success {
+  background-color: #00c853;
+  color: white;
+}
+
+.danger {
+  background-color: #e91e63;
+  color: white;
+}
+
+.success:hover {
+  background-color: #00b44c;
+}
+
+.danger:hover {
+  background-color: #d81b60;
+}
+

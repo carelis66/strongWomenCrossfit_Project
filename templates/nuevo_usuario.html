@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuevo Usuario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_usuarios') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <h2>Agregar Nuevo Usuario</h2>
+    <form method="POST">
+      <input type="text" name="nombre" placeholder="Nombre completo" required>
+      <input type="text" name="usuario" placeholder="Nombre de usuario" required>
+      <input type="password" name="password" placeholder="Contraseña" required>
+
+      <select name="rol" required>
+        <option value="ADMIN">ADMIN</option>
+        <option value="RECEPCION">RECEPCION</option>
+        <option value="COACH">COACH</option>
+      </select>
+
+      <button type="submit" class="boton">Guardar</button>
+    </form>
+  </main>
+
+</body>
+</html>

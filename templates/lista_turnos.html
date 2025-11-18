@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Turnos - Strong Women Crossfit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    h2 {
+      color: #ff4f9a;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 28px;
+    }
+
+    h3.fecha {
+      color: #ff4f9a;
+      border-bottom: 2px solid #ff4f9a;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .main-container {
+      width: 90%;
+      margin: 0 auto;
+      flex: 1;
+      padding-bottom: 50px;
+    }
+
+    table.styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .styled-table th, .styled-table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .styled-table th {
+      background-color: #222;
+      color: #ff4f9a;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .styled-table tr:hover {
+      background-color: #222;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 2px;
+      display: inline-block;
+    }
+
+    .success {
+      background-color: #00c853;
+      color: white;
+    }
+
+    .danger {
+      background-color: #e91e63;
+      color: white;
+    }
+
+    .success:hover {
+      background-color: #00b44c;
+    }
+
+    .danger:hover {
+      background-color: #d81b60;
+    }
+
+    .btn-add {
+      display: inline-block;
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      transition: background 0.3s ease;
+    }
+
+    .btn-add:hover {
+      background-color: #e04385;
+    }
+
+    .bloqueado {
+      color: #888;
+      font-style: italic;
+    }
+
+    .navbar {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      border-bottom: 2px solid #ff4f9a;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-right a {
+      background-color: #ff4f9a;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-right a:hover {
+      background-color: #e04385;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 2px solid #ff4f9a;
+      background-color: #000;
+      font-size: 14px;
+      color: #999;
+    }
+
+    footer a {
+      color: #ff4f9a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <!-- ✅ Volver al dashboard de recepción -->
+      <a href="{{ url_for('recepcion') }}">⬅ Volver</a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="main-container">
+    <h2>Agenda de Turnos</h2>
+
+    {% if turnos_por_fecha %}
+      {% for fecha, lista in turnos_por_fecha.items() %}
+        <h3 class="fecha">📅 Turnos del {{ fecha }}</h3>
+
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Clienta</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in lista %}
+            <tr>
+              <td>{{ t.nombre_clienta }}</td>
+              <td>{{ t.hora }}</td>
+              <td>
+                {% if t.estado == "Asistió" %}
+                  ✅ {{ t.estado }}
+                {% elif t.estado == "Ausente" %}
+                  ❌ {{ t.estado }}
+                {% else %}
+                  ⏳ {{ t.estado }}
+                {% endif %}
+              </td>
+              <td>
+                {% set turno_datetime = t.fecha|string + ' ' + t.hora|string %}
+                {% if turno_datetime > ahora.strftime('%Y-%m-%d %H:%M:%S') %}
+                  <a href="{{ url_for('cambiar_estado_turno', id_turno=t.id, nuevo_estado='Asistió') }}" class="btn-small success">Asistió</a>
+                  <a href="{{ url_for('cambiar_estado_turno', id_turno=t.id, nuevo_estado='Ausente') }}" class="btn-small danger">Ausente</a>
+                {% else %}
+                  <span class="bloqueado">🔒 Bloqueado (pasado)</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% endfor %}
+    {% else %}
+      <p style="color: #ccc; text-align:center;">No hay turnos registrados aún.</p>
+    {% endif %}
+
+    <div style="text-align:center; margin-top: 30px;">
+      <a href="{{ url_for('nuevo_turno') }}" class="btn-add">➕ Agregar Nuevo Turno</a>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Panel de Recepción — Strong Women Crossfit © 2025 | <a href="{{ url_for('recepcion') }}">Volver al Inicio</a></p>
+  </footer>
+
+</body>
+</html>
+
+
+

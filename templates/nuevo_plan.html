@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar Nuevo Plan</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="nav-logo">
+      <h2>Strong Women Crossfit</h2>
+    </div>
+    <div class="navbar-right">
+      <a href="{{ url_for('listar_planes') }}" class="logout-btn">Volver</a>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <form method="POST" class="form-card">
+      <h2>Agregar Nuevo Plan</h2>
+
+      <label>Nombre del Plan:</label>
+      <input type="text" name="nombre" placeholder="Ej: RX, Scaled, Amateur" required>
+
+      <label>Precio:</label>
+      <input type="number" name="precio" placeholder="Ingrese el precio" required>
+
+      <label>Nivel:</label>
+      <input type="text" name="nivel" placeholder="Ej: Inicial, Intermedio, Avanzado" required>
+
+      <label>Duración (semanas o meses):</label>
+      <input type="text" name="duracion" placeholder="Ej: 3 meses" required>
+
+      <label>Descripción:</label>
+      <textarea name="descripcion" placeholder="Describe brevemente el plan" rows="4"></textarea>
+
+      <button type="submit" class="btn-guardar">Guardar Plan</button>
+    </form>
+  </main>
+</body>
+</html>
+
+
